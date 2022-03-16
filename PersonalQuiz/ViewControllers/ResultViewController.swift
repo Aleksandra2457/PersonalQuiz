@@ -16,11 +16,14 @@ class ResultViewController: UIViewController {
     // MARK: - Public Properties
     var responses: [Answer] = []
     
+    // MARK: - Private Properties
+    var mostCommonAnswer: Animal!
+    
     // MARK: - Life Cycles Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.hidesBackButton = true
-        calculateResult()
+        setupResultLabels()
     }
     
     // MARK: - Private Methods
@@ -28,10 +31,13 @@ class ResultViewController: UIViewController {
         let frequencyOfAnswers = responses.reduce(into: [:]) { (counter, answer) in
             counter[answer.animal, default: 0] += 1
         }
-        
-        let mostCommonAnswer = frequencyOfAnswers.sorted { $0.1 > $1.1 }.first!.key
+        mostCommonAnswer = frequencyOfAnswers.sorted { $0.1 > $1.1 }.first!.key
+    }
+    
+    private func setupResultLabels() {
+        calculateResult()
         animalTypeLabel.text = "Вы - \(mostCommonAnswer.rawValue)"
         descriptionAnimalLabel.text = mostCommonAnswer.definition
     }
-    
+
 }
