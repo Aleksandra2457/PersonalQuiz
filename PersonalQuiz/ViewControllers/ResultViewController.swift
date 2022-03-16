@@ -9,17 +9,29 @@ import UIKit
 
 class ResultViewController: UIViewController {
     
-    // MARK: - Private Properties
-    private var responses: [Answer] = []
+    // MARK: - IB Outlets
+    @IBOutlet var animalTypeLabel: UILabel!
+    @IBOutlet var descriptionAnimalLabel: UILabel!
     
-    // 1. Передать массив с ответами на экран с результатами
-    // 2. Определить наиболее часто встречающийся тип животного
-    // 3. Отобразить результаты в соответствии с этим животным
-    // 4. Избавиться от кнопки возврата назад на экране результатов
-
-
+    // MARK: - Public Properties
+    var responses: [Answer] = []
+    
+    // MARK: - Life Cycles Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        navigationItem.hidesBackButton = true
+        calculateResult()
     }
+    
+    // MARK: - Private Methods
+    private func calculateResult() {
+        let frequencyOfAnswers = responses.reduce(into: [:]) { (counter, answer) in
+            counter[answer.animal, default: 0] += 1
+        }
+        
+        let mostCommonAnswer = frequencyOfAnswers.sorted { $0.1 > $1.1 }.first!.key
+        animalTypeLabel.text = "Вы - \(mostCommonAnswer.rawValue)"
+        descriptionAnimalLabel.text = mostCommonAnswer.definition
+    }
+    
 }
